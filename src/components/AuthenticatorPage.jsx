@@ -5,12 +5,12 @@ export default function AuthenticatorPage() {
   const [timer, setTimer] = useState(30);
   const [error, setError] = useState("");
   const [user, setUser] = useState(() => {
-    // Initialize user from localStorage immediately
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   });
 
-  // Function to fetch TOTP from backend
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
   const fetchTOTP = async (currentUser) => {
     if (!currentUser?.email && !currentUser?.mobile) {
       setError("Email or phone required");
@@ -23,7 +23,7 @@ export default function AuthenticatorPage() {
       : `phone=${encodeURIComponent(currentUser.mobile)}`;
 
     try {
-      const res = await fetch(`http://localhost:3001/api/auth/current-totp?${query}`);
+      const res = await fetch(`${BACKEND_URL}/api/auth/current-totp?${query}`);
       const data = await res.json();
 
       if (data.success && data.code) {
@@ -41,13 +41,12 @@ export default function AuthenticatorPage() {
     }
   };
 
-  // Fetch TOTP immediately and set intervals
   useEffect(() => {
     if (!user) return;
 
-    fetchTOTP(user); // initial fetch
+    fetchTOTP(user);
 
-    const codeInterval = setInterval(() => fetchTOTP(user), 30000); // refresh every 30s
+    const codeInterval = setInterval(() => fetchTOTP(user), 30000);
     const countdown = setInterval(() => {
       setTimer((prev) => (prev > 0 ? prev - 1 : 30));
     }, 1000);
