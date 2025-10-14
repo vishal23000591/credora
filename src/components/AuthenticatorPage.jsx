@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
 
-export default function AuthenticatorPage() {
+function AuthenticatorPage() {
   const [code, setCode] = useState("Loading...");
   const [timer, setTimer] = useState(30);
   const [error, setError] = useState("");
-  const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [user, setUser] = useState(null);
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  // Load user from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.error("Error parsing user:", err);
+        setError("Invalid user data");
+        setCode("Error");
+      }
+    }
+  }, []);
 
+  // Fetch TOTP
   const fetchTOTP = async (currentUser) => {
     if (!currentUser?.email && !currentUser?.mobile) {
       setError("Email or phone required");
@@ -23,7 +33,7 @@ export default function AuthenticatorPage() {
       : `phone=${encodeURIComponent(currentUser.mobile)}`;
 
     try {
-      const res = await fetch(`${BACKEND_URL}/api/auth/current-totp?${query}`);
+      const res = await fetch(`https://reva-ai-authenticator-backend.onrender.com/api/auth/current-totp?${query}`); // relative path like Login.jsx
       const data = await res.json();
 
       if (data.success && data.code) {
@@ -41,10 +51,11 @@ export default function AuthenticatorPage() {
     }
   };
 
+  // Start intervals
   useEffect(() => {
     if (!user) return;
 
-    fetchTOTP(user);
+    fetchTOTP(user); // initial fetch
 
     const codeInterval = setInterval(() => fetchTOTP(user), 30000);
     const countdown = setInterval(() => {
@@ -67,24 +78,9 @@ export default function AuthenticatorPage() {
   }
 
   return (
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "auto",
-        textAlign: "center",
-        padding: "2rem",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-      }}
-    >
+    <div style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center", padding: "2rem", border: "1px solid #ccc", borderRadius: "8px" }}>
       <h2>Authenticator Code</h2>
-      <div
-        style={{
-          fontSize: "2.5rem",
-          fontWeight: "bold",
-          margin: "1rem 0",
-        }}
-      >
+      <div style={{ fontSize: "2.5rem", fontWeight: "bold", margin: "1rem 0" }}>
         {code}
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -92,3 +88,5 @@ export default function AuthenticatorPage() {
     </div>
   );
 }
+
+export default AuthenticatorPage;
