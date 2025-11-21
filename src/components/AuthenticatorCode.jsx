@@ -33,7 +33,7 @@ export default function AuthenticatorCode() {
       : `phone=${encodeURIComponent(currentUser.mobile)}`;
 
     try {
-      const res = await fetch(`https://reva-ai-authenticator-backend.onrender.com/api/auth/current-totp?email=${encodeURIComponent(user.email)}`
+      const res = await fetch(`https://credora-backend-p301.onrender.com/api/auth/current-totp?email=${encodeURIComponent(user.email)}`
 );
       const data = await res.json();
 

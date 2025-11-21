@@ -22,7 +22,7 @@ function Signup() {
     }
 
     try {
-      const res = await fetch("https://reva-ai-authenticator-backend.onrender.com/api/auth/send-otp-signup", {
+      const res = await fetch("https://credora-backend-p301.onrender.com/api/auth/send-otp-signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone }),
@@ -48,7 +48,7 @@ function Signup() {
   }
 
   try {
-    const res = await fetch("https://reva-ai-authenticator-backend.onrender.com/api/auth/verify-otp", {
+    const res = await fetch("https://credora-backend-p301.onrender.com/api/auth/verify-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, phone, otp }),

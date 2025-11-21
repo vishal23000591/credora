@@ -14,7 +14,7 @@ function Login() {
       return;
     }
     try {
-      const res = await fetch("https://reva-ai-authenticator-backend.onrender.com/api/auth/send-otp-login", {
+      const res = await fetch("https://credora-backend-p301.onrender.com/api/auth/send-otp-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone })
@@ -34,7 +34,7 @@ function Login() {
 
   const verifyOtp = async () => {
   try {
-    const res = await fetch("https://reva-ai-authenticator-backend.onrender.com/api/auth/verify-otp", {
+    const res = await fetch("https://credora-backend-p301.onrender.com/api/auth/verify-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ phone, otp })

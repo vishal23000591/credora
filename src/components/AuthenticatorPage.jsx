@@ -33,7 +33,7 @@ function AuthenticatorPage() {
       : `phone=${encodeURIComponent(currentUser.mobile)}`;
 
     try {
-      const res = await fetch(`https://reva-ai-authenticator-backend.onrender.com/api/auth/current-totp?${query}`); // relative path like Login.jsx
+      const res = await fetch(`https://credora-backend-p301.onrender.com/api/auth/current-totp?${query}`); // relative path like Login.jsx
       const data = await res.json();
 
       if (data.success && data.code) {
