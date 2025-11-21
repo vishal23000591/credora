@@ -4,7 +4,7 @@ import "../index.css"; // make sure CSS is imported
 function Footer() {
   return (
     <footer className="footer">
-      <p>© {new Date().getFullYear()} REVA AI Authenticator. All rights reserved.</p>
+      <p>© {new Date().getFullYear()} Credora Authenticator. All rights reserved.</p>
     </footer>
   );
 }
